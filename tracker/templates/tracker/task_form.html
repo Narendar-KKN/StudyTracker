@@ -1,0 +1,16 @@
+{% extends "tracker/base.html" %}
+{% block title %}{{ page_title }} | StudyTracker{% endblock %}
+{% block content %}
+<section class="form-card">
+  <span class="eyebrow">PLAN YOUR NEXT STEP</span><h1>{{ page_title }}</h1>
+  <form method="post">{% csrf_token %}
+    {% for field in form %}
+      <label class="field-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% for error in field.errors %}<div class="error">{{ error }}</div>{% endfor %}
+    {% endfor %}
+    <button class="btn btn-primary full-width" type="submit">Save</button>
+  </form>
+  <p class="form-bottom"><a href="{% url 'dashboard' %}">Back to dashboard</a></p>
+</section>
+{% endblock %}

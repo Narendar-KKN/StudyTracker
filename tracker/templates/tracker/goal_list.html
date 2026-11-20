@@ -1,0 +1,14 @@
+{% extends "tracker/base.html" %}
+{% block title %}My Goals | StudyTracker{% endblock %}
+{% block content %}
+<section class="page-heading"><div><span class="eyebrow">THINK BIG, START SMALL</span><h1>My study goals</h1><p class="muted">Make your learning intentions visible.</p></div><a class="btn btn-primary" href="{% url 'goal_create' %}">+ Add a goal</a></section>
+<section class="panel">
+{% for goal in goals %}
+  <div class="list-row">
+    <form method="post" action="{% url 'goal_toggle' goal.pk %}">{% csrf_token %}<input class="check-input" type="checkbox" {% if goal.completed %}checked{% endif %} onchange="this.form.submit()"></form>
+    <div class="row-main"><strong class="{% if goal.completed %}strike{% endif %}">{{ goal.title }}</strong><small>{% if goal.target_date %}Target {{ goal.target_date|date:"M j, Y" }}{% else %}No target date{% endif %}</small></div>
+    <form method="post" action="{% url 'goal_delete' goal.pk %}" onsubmit="return confirm('Delete this goal?');">{% csrf_token %}<button class="link-button danger" type="submit">Delete</button></form>
+  </div>
+{% empty %}<div class="empty-state"><h3>No goals yet</h3><p>Set one small goal to get started.</p></div>{% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "tracker/base.html" %}
+{% block title %}Dashboard | StudyTracker{% endblock %}
+{% block content %}
+<section class="page-heading"><div><span class="eyebrow">YOUR OVERVIEW</span><h1>Welcome back, {{ user.username }}!</h1><p class="muted">A little progress each day adds up.</p></div><a class="btn btn-primary" href="{% url 'task_create' %}">+ Add a task</a></section>
+<section class="stats-grid">
+  <article class="stat-card"><span>Total tasks</span><strong>{{ total_tasks }}</strong><small>All your study tasks</small></article>
+  <article class="stat-card"><span>Completed</span><strong>{{ completed_tasks }}</strong><small>Tasks finished</small></article>
+  <article class="stat-card"><span>Pending</span><strong>{{ pending_tasks }}</strong><small>Still to work on</small></article>
+  <article class="stat-card accent-stat"><span>Progress</span><strong>{{ percentage }}%</strong><div class="progress-track"><i style="width: {{ percentage }}%"></i></div></article>
+</section>
+<div class="content-columns">
+  <section class="panel"><div class="panel-heading"><h2>Recent study tasks</h2><a href="{% url 'task_list' %}">View all</a></div>
+    {% for task in tasks %}
+      <div class="list-row"><div class="task-status {% if task.completed %}done{% endif %}">{% if task.completed %}✓{% else %}•{% endif %}</div><div class="row-main"><strong class="{% if task.completed %}strike{% endif %}">{{ task.title }}</strong><small>{% if task.due_date %}Due {{ task.due_date|date:"M j, Y" }}{% else %}No due date{% endif %}</small></div><span class="priority {{ task.priority }}">{{ task.get_priority_display }}</span></div>
+    {% empty %}<div class="empty-state"><p>No tasks yet. Add your first study task to get started.</p><a href="{% url 'task_create' %}">Add a task</a></div>{% endfor %}
+  </section>
+  <section class="panel"><div class="panel-heading"><h2>Your goals</h2><a href="{% url 'goal_list' %}">View all</a></div>
+    {% for goal in goals %}<div class="goal-row"><span class="goal-dot {% if goal.completed %}done{% endif %}"></span><div class="row-main"><strong class="{% if goal.completed %}strike{% endif %}">{{ goal.title }}</strong><small>{% if goal.target_date %}Target {{ goal.target_date|date:"M j, Y" }}{% else %}No target date{% endif %}</small></div></div>
+    {% empty %}<div class="empty-state"><p>No goals added yet.</p><a href="{% url 'goal_create' %}">Set your first goal</a></div>{% endfor %}
+    <a class="btn btn-light full-width add-goal" href="{% url 'goal_create' %}">+ Add a goal</a>
+  </section>
+</div>
+{% endblock %}

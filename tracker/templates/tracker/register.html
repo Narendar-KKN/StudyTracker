@@ -1,0 +1,18 @@
+{% extends "tracker/base.html" %}
+{% block title %}Create account | StudyTracker{% endblock %}
+{% block content %}
+<section class="form-card">
+  <span class="eyebrow">START YOUR JOURNEY</span><h1>Create your account</h1><p class="muted">A focused space for your learning goals.</p>
+  <form method="post">{% csrf_token %}
+    {% for field in form %}
+      <label class="field-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<div class="help-text">{{ field.help_text|safe }}</div>{% endif %}
+      {% for error in field.errors %}<div class="error">{{ error }}</div>{% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}<div class="error">{{ error }}</div>{% endfor %}
+    <button class="btn btn-primary full-width" type="submit">Create account</button>
+  </form>
+  <p class="form-bottom">Already registered? <a href="{% url 'login' %}">Log in</a></p>
+</section>
+{% endblock %}
